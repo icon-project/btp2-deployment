@@ -1,0 +1,12 @@
+# node.js
+node_modules
+coverage
+coverage.json
+typechain
+typechain-types
+
+# solidity copied src
+solidity/contracts/bmc
+solidity/contracts/bmv
+solidity/contracts/bmv-bridge
+solidity/contracts/xcall
