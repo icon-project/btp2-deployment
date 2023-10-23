@@ -259,3 +259,18 @@ icon-manager-service:
  	address=$(address) \
  	method=$(method) \
 	$(HARDHAT) run scripts/icon/manager/service.ts
+
+#xCall Multi
+xcall-multi-deploy:
+	@ echo ">>> xcall multi deploy" ; \
+	srcNetworkPath=$(srcNetworkPath) jarPath=$(jarPath) $(HARDHAT) run scripts/icon/deploy/xcall_multi.ts
+
+
+xcall-multi-dapp-deploy:
+	@ echo ">>> xcall multi dapp deploy" ; \
+	srcNetworkPath=$(srcNetworkPath) jarPath=$(jarPath) $(HARDHAT) run scripts/icon/deploy/xcall_multi_dapp.ts
+
+
+xcall-multi-set-connection:
+	@ echo ">>> xcall multi dapp deploy" ; \
+	srcNetworkPath=$(srcNetworkPath) dstNetworkPath=$(dstNetworkPath) $(HARDHAT) run scripts/icon/manager/xcall_multi_set_connection.ts

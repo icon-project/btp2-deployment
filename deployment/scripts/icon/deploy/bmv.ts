@@ -14,7 +14,7 @@ async function deployHertzBmv(srcConfig: BTP2Config, dstConfig: BTP2Config) {
     const srcContractsConfig = srcConfig.contractsConfig.getContract()
     const dstChainConfig = dstConfig.chainConfig.getChain()
     const iconNetwork = IconNetwork.getNetwork(srcChainConfig)
-    const content = Jar.readFromFile(JAVASCORE_PATH, "bmv/bsc2");
+    const content = Jar.readFromProject(JAVASCORE_PATH, "bmv/bsc2");
     const params = await genBsc2JavBmvParams(dstChainConfig, srcContractsConfig.bmc)
 
     console.log(`java bsc2 bmv init conf data`)
@@ -42,7 +42,7 @@ async function deployEth2Bmv(srcConfig: BTP2Config, dstConfig: BTP2Config) {
     const bmvInitData = await genEth2JavBmvParams()
     console.log(`java eth2 bmv init conf data.`);
     console.log(bmvInitData)
-    const content = Jar.readFromFile(JAVASCORE_PATH, "bmv/eth2");
+    const content = Jar.readFromProject(JAVASCORE_PATH, "bmv/eth2");
     const bmv = new Contract(iconNetwork)
     const deployTxHash = await bmv.deploy({
         content: content,
@@ -69,7 +69,7 @@ async function deployBridgeBmv(srcConfig: BTP2Config, dstConfig: BTP2Config) {
     const dstChainConfig = dstConfig.chainConfig.getChain()
     const iconNetwork = IconNetwork.getNetwork(srcChainConfig)
 
-    const content = Jar.readFromFile(JAVASCORE_PATH, "bmv/bridge");
+    const content = Jar.readFromProject(JAVASCORE_PATH, "bmv/bridge");
     const bmv = new Contract(iconNetwork)
     const blockNum = await getBlockNumber(dstChainConfig)
     const deployTxHash = await bmv.deploy({
@@ -95,7 +95,7 @@ async function deployBtpBlock(srcConfig: BTP2Config, dstConfig: BTP2Config, netw
     const iconNetwork = IconNetwork.getNetwork(srcChainConfig)
     const firstBlockHeader = await getFirstBtpBlockHeader(dstChainConfig, networkId);
 
-    const content = Jar.readFromFile(JAVASCORE_PATH, "bmv/btpblock");
+    const content = Jar.readFromProject(JAVASCORE_PATH, "bmv/btpblock");
     const bmv = new Contract(iconNetwork)
 
     const deployTxHash = await bmv.deploy({

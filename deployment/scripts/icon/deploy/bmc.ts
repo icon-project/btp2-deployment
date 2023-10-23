@@ -7,7 +7,7 @@ async function deployBmc(config: BTP2Config) {
     const iconNetwork = IconNetwork.getNetwork(chainConfig);
     console.log(`${chainConfig.id}: deploy BMC for ${chainConfig.network}`)
 
-    const content = Jar.readFromFile(JAVASCORE_PATH, "bmc");
+    const content = Jar.readFromProject(JAVASCORE_PATH, "bmc");
     const bmc = new Contract(iconNetwork)
     const deployTxHash = await bmc.deploy({
         content: content,

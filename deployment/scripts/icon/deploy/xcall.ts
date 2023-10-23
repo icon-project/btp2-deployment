@@ -6,7 +6,7 @@ async function deployXcall(config: BTP2Config) {
     const chainConfig = config.chainConfig.getChain()
     const contractsConfig = config.contractsConfig.getContract()
     const iconNetwork = IconNetwork.getNetwork(chainConfig);
-    const content = Jar.readFromFile(JAVASCORE_PATH, "xcall", "0.6.2");
+    const content = Jar.readFromProject(JAVASCORE_PATH, "xcall", "0.6.2");
     const xcall = new Contract(iconNetwork)
     const deployTxHash = await xcall.deploy({
         content: content,

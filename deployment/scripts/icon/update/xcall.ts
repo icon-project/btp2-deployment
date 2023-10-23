@@ -6,7 +6,7 @@ async function upgradeXcall(config: BTP2Config) {
     const contractsConfig = config.contractsConfig.getContract()
     const iconNetwork = IconNetwork.getNetwork(chainConfig);
 
-    const content = Jar.readFromFile(JAVASCORE_PATH, "xcall", "0.6.2");
+    const content = Jar.readFromProject(JAVASCORE_PATH, "xcall", "0.6.2");
     const xcall = new Contract(iconNetwork)
     const updateXcallTxHash = await xcall.update({
         content: content,

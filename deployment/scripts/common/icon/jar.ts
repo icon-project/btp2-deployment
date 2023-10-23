@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 export class Jar {
-  public static readFromFile(base: string | undefined, project: string, version?: string) {
+  public static readFromProject(base: string | undefined, project: string, version?: string) {
     if (!base) {
       base = "../javascore";
     }
@@ -17,4 +17,9 @@ export class Jar {
     const fullPath = path.join(base, project, build, optJar);
     return fs.readFileSync(fullPath).toString('hex')
   }
+
+  public static readFromFile(fullPath: string) {
+    return fs.readFileSync(fullPath).toString('hex')
+  }
+
 }
