@@ -1,4 +1,4 @@
-+# xCall Multi Deployment
+# xCall Multi Deployment
 
 ## Introduction
 Configure an xCall Multi environment that is connected between icon networks.
