@@ -11,6 +11,35 @@ Configure an xCall Multi environment that is connected between icon networks.
 ### Getting Started
 1. [Getting Started](./README.md#getting-started)
 
+#### Network config example
+*  SOURCE_NETWORK_CONFIG.json
+```
+{
+"chain": {
+    "id": "icon_local0",
+    "network": "0x3.icon",
+    "endpoint": "http://localhost:9080/api/v3/icon_dex",
+    "keystore": "./icon0/keystore.json",
+    "keypass": "icon_local0",
+    "type": "icon-btpblock-java"
+  }
+}
+```
+
+*  DESTINATION_NETWORK_CONFIG.json
+```
+{
+"chain": {
+    "id": "icon_local1",
+    "network": "0x101.icon",
+    "endpoint": "http://localhost:9180/api/v3/icon_dex",
+    "keystore": "./icon1/keystore.json",
+    "keypass": "icon_local1",
+    "type": "icon-btpblock-java"
+  }
+}
+```
+
 2. Add contract for xcall multi as submodule.
 ```
  git submodule add https://github.com/icon-project/xcall-multi.git ${PROJECT_ROOT}/xcall-multi
