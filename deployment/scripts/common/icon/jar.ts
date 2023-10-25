@@ -8,7 +8,7 @@ export class Jar {
     }
     const build = "build/libs";
     const name = project.replace("/", "-");
-    const pattern = `${name}-${version ? version: "(\\S)+"}-optimized.jar`;
+    const pattern = `${name}-${version ? version : "(\\S)+"}-optimized.jar`;
     const regex = new RegExp(pattern);
     const dir = path.join(base, project, build);
     const files = fs.readdirSync(dir);

@@ -166,6 +166,12 @@ eth-manager-service:
  	address=$(address) \
 	$(HARDHAT) run scripts/eth/manager/service.ts
 
+eth-manager-verifier:
+	@ echo ">>> ETH ${method}Verifier  " ; \
+ 	srcNetworkPath=$(srcNetworkPath) \
+ 	dstNetworkPath=$(dstNetworkPath) \
+ 	method=$(method) \
+	$(HARDHAT) run scripts/eth/manager/verifier.ts
 
 #ICON
 icon-deploy-bmc:
@@ -260,17 +266,9 @@ icon-manager-service:
  	method=$(method) \
 	$(HARDHAT) run scripts/icon/manager/service.ts
 
-#xCall Multi
-xcall-multi-deploy:
-	@ echo ">>> xcall multi deploy" ; \
-	srcNetworkPath=$(srcNetworkPath) jarPath=$(jarPath) $(HARDHAT) run scripts/icon/deploy/xcall_multi.ts
-
-
-xcall-multi-dapp-deploy:
-	@ echo ">>> xcall multi dapp deploy" ; \
-	srcNetworkPath=$(srcNetworkPath) jarPath=$(jarPath) $(HARDHAT) run scripts/icon/deploy/xcall_multi_dapp.ts
-
-
-xcall-multi-set-connection:
-	@ echo ">>> xcall multi dapp deploy" ; \
-	srcNetworkPath=$(srcNetworkPath) dstNetworkPath=$(dstNetworkPath) $(HARDHAT) run scripts/icon/manager/xcall_multi_set_connection.ts
+icon-manager-verifier:
+	@ echo ">>> ICON ${method}Verifier  " ; \
+ 	srcNetworkPath=$(srcNetworkPath) \
+ 	dstNetworkPath=$(dstNetworkPath) \
+ 	method=$(method) \
+	$(HARDHAT) run scripts/icon/manager/verifier.ts

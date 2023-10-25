@@ -1,6 +1,5 @@
 import {BTP2Config, getBtpAddress, getRelayAddress} from "../../common/config";
-import {BMC, Contract, IconNetwork, XCall} from "../../common/icon";
-import {complete} from "hardhat/internal/cli/autocomplete";
+import {BMC, IconNetwork} from "../../common/icon";
 
 function getBMCContract(config: BTP2Config) {
     const chainConfig = config.chainConfig.getChain()
@@ -8,6 +7,58 @@ function getBMCContract(config: BTP2Config) {
     const network = IconNetwork.getNetwork(chainConfig);
     return  new BMC(network, contractsConfig.bmc);
 }
+
+export async function getVerifiers(srcConfig: BTP2Config){
+    const srcChainConfig = srcConfig.chainConfig.getChain()
+    const srcContractsConfig = srcConfig.contractsConfig.getContract()
+
+    const srcNetwork = IconNetwork.getNetwork(srcChainConfig);
+    const bmc = new BMC(srcNetwork, srcContractsConfig.bmc);
+    console.log(`${srcChainConfig.id}: getVerifiers`)
+    const verifier = await bmc.getVerifiers()
+    console.log(verifier)
+}
+
+export async function addVerifier(srcConfig: BTP2Config, dstConfig: BTP2Config){
+    const srcChainConfig = srcConfig.chainConfig.getChain()
+    const srcContractsConfig = srcConfig.contractsConfig.getContract()
+    const dstChainConfig = dstConfig.chainConfig.getChain()
+    const dstContractsConfig = dstConfig.contractsConfig.getContract()
+
+    const srcNetwork = IconNetwork.getNetwork(srcChainConfig);
+    const bmc = new BMC(srcNetwork, srcContractsConfig.bmc);
+    const dstBmcAddr = getBtpAddress(dstChainConfig.network, dstContractsConfig.bmc);
+
+    console.log(`${srcChainConfig.id}: addVerifier for ${dstChainConfig.network}`)
+    const bmvAddress = srcConfig.contractsConfig.getBmv(dstChainConfig.id).address
+    await bmc.addVerifier(dstChainConfig.network, bmvAddress)
+        .then((txHash) => bmc.getTxResult(txHash))
+        .then((result) => {
+            if (result.status != 1) {
+                throw new Error(`ICON: failed to register BMV to BMC: ${result.txHash}`);
+            }
+        })
+}
+
+export async function removeVerifier(srcConfig: BTP2Config, dstConfig: BTP2Config){
+    const srcChainConfig = srcConfig.chainConfig.getChain()
+    const srcContractsConfig = srcConfig.contractsConfig.getContract()
+    const dstChainConfig = dstConfig.chainConfig.getChain()
+
+    const srcNetwork = IconNetwork.getNetwork(srcChainConfig);
+    const bmc = new BMC(srcNetwork, srcContractsConfig.bmc);
+
+    console.log(`${srcChainConfig.id}: removeVerifier for ${dstChainConfig.network}`)
+    await bmc.removeVerifier(dstChainConfig.network)
+        .then((txHash) => bmc.getTxResult(txHash))
+        .then((result) => {
+            if (result.status != 1) {
+                throw new Error(`ICON: failed to remove verifier: ${result.txHash}`);
+            }
+        })
+    srcConfig.contractsConfig.removeBmv(dstChainConfig.id)
+}
+
 export async function addLink(srcConfig: BTP2Config, dstConfig: BTP2Config, networkId: string){
     const srcChainConfig = srcConfig.chainConfig.getChain()
     const srcContractsConfig = srcConfig.contractsConfig.getContract()

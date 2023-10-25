@@ -41,6 +41,22 @@ export class BMC extends Contract {
     })
   }
 
+  getVerifiers() {
+    return this.call({
+      method: 'getVerifiers'
+    })
+  }
+
+  getRelays(link: string) {
+    return this.call({
+      method: 'getRelays',
+      params: {
+        _link: link
+      }
+    })
+  }
+
+
   setMode(mode: string) {
     return this.invoke({
       method: 'setMode',
