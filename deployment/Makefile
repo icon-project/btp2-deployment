@@ -166,6 +166,12 @@ eth-manager-service:
  	address=$(address) \
 	$(HARDHAT) run scripts/eth/manager/service.ts
 
+eth-manager-verifier:
+	@ echo ">>> ETH ${method}Verifier  " ; \
+ 	srcNetworkPath=$(srcNetworkPath) \
+ 	dstNetworkPath=$(dstNetworkPath) \
+ 	method=$(method) \
+	$(HARDHAT) run scripts/eth/manager/verifier.ts
 
 #ICON
 icon-deploy-bmc:
@@ -259,3 +265,10 @@ icon-manager-service:
  	address=$(address) \
  	method=$(method) \
 	$(HARDHAT) run scripts/icon/manager/service.ts
+
+icon-manager-verifier:
+	@ echo ">>> ICON ${method}Verifier  " ; \
+ 	srcNetworkPath=$(srcNetworkPath) \
+ 	dstNetworkPath=$(dstNetworkPath) \
+ 	method=$(method) \
+	$(HARDHAT) run scripts/icon/manager/verifier.ts

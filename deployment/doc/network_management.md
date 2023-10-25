@@ -251,6 +251,10 @@ method=remove
 
 ### Get Mode
 
+Get network id of the BTPLink
+> 0: Normal<br/>
+> 1: Maintenance
+
 * ICON
 
 ```
@@ -276,6 +280,8 @@ method=get
 
 ### Set Mode
 
+Called by the operator to manage the BTP network.
+
 * ICON
 
 ```
@@ -298,3 +304,87 @@ method=set
 |:---------------|:-------|:---------------------------------------|
 | srcNetworkPath | String | Source Network Configuration file path |
 | method         | String | method                                 |
+
+### Get Verifiers
+Get registered verifiers.
+* ICON
+
+```
+make icon-manager-verifier \
+srcNetworkPath=./ICON_NETWORK_CONFIG.json
+method=get
+```
+
+* ETH
+
+```
+make eth-manager-verifier \
+srcNetworkPath=./BSC_NETWORK_CONFIG.json
+method=get
+```
+
+#### Environment
+
+| Name           | Type   | Description                                 |
+|:---------------|:-------|:--------------------------------------------|
+| srcNetworkPath | String | Source Network Configuration file path      |
+| method         | String | method                                      |
+
+### Add Verifier
+Registers BMV for the network
+
+* ICON
+
+```
+make icon-manager-verifier \
+srcNetworkPath=./ICON_NETWORK_CONFIG.json \
+dstNetworkPath=./BSC_NETWORK_CONFIG.json \
+method=add
+```
+
+* ETH
+
+```
+make eth-manager-verifier \
+srcNetworkPath=./BSC_NETWORK_CONFIG.json \
+dstNetworkPath=./ICON_NETWORK_CONFIG.json \
+method=add
+```
+
+#### Environment
+
+| Name           | Type   | Description                                 |
+|:---------------|:-------|:--------------------------------------------|
+| srcNetworkPath | String | Source Network Configuration file path      |
+| dstNetworkPath | String | Destination Network Configuration file path |
+| method         | String | method                                      |
+
+### Remove Verifier
+
+Unregisters BMV for the network.
+
+* ICON
+
+```
+make icon-manager-verifier \
+srcNetworkPath=./ICON_NETWORK_CONFIG.json \
+dstNetworkPath=./BSC_NETWORK_CONFIG.json \
+method=remove
+```
+
+* ETH
+
+```
+make eth-manager-verifier \
+srcNetworkPath=./BSC_NETWORK_CONFIG.json \
+dstNetworkPath=./ICON_NETWORK_CONFIG.json \
+method=remove
+```
+
+#### Environment
+
+| Name           | Type   | Description                                 |
+|:---------------|:-------|:--------------------------------------------|
+| srcNetworkPath | String | Source Network Configuration file path      |
+| dstNetworkPath | String | Destination Network Configuration file path |
+| method         | String | method                                      |

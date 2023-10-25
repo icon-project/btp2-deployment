@@ -2,13 +2,13 @@ import fs from 'fs';
 import path from 'path';
 
 export class Jar {
-  public static readFromFile(base: string | undefined, project: string, version?: string) {
+  public static readFromProject(base: string | undefined, project: string, version?: string) {
     if (!base) {
       base = "../javascore";
     }
     const build = "build/libs";
     const name = project.replace("/", "-");
-    const pattern = `${name}-${version ? version: "(\\S)+"}-optimized.jar`;
+    const pattern = `${name}-${version ? version : "(\\S)+"}-optimized.jar`;
     const regex = new RegExp(pattern);
     const dir = path.join(base, project, build);
     const files = fs.readdirSync(dir);
@@ -17,4 +17,9 @@ export class Jar {
     const fullPath = path.join(base, project, build, optJar);
     return fs.readFileSync(fullPath).toString('hex')
   }
+
+  public static readFromFile(fullPath: string) {
+    return fs.readFileSync(fullPath).toString('hex')
+  }
+
 }

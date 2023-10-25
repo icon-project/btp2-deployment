@@ -7,7 +7,7 @@ async function deployDapp(config: BTP2Config) {
     const contractsConfig = config.contractsConfig.getContract()
 
     const iconNetwork = IconNetwork.getNetwork(chainConfig);
-    const content = Jar.readFromFile(JAVASCORE_PATH, "dapp-sample");
+    const content = Jar.readFromProject(JAVASCORE_PATH, "dapp-sample");
     const dapp = new Contract(iconNetwork)
     const deployTxHash = await dapp.deploy({
         content: content,

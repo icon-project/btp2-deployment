@@ -9,7 +9,7 @@ async function updateHertzBmv(srcConfig: BTP2Config, dstConfig: BTP2Config) {
     const dstChainConfig = dstConfig.chainConfig.getChain()
 
     const iconNetwork = IconNetwork.getNetwork(srcChainConfig)
-    const content = Jar.readFromFile(JAVASCORE_PATH, "bmv/bsc2");
+    const content = Jar.readFromProject(JAVASCORE_PATH, "bmv/bsc2");
     const bmv = new Contract(iconNetwork)
     const bmvAddr = srcConfig.contractsConfig.getBmv(dstChainConfig.id).address
     const params = await genUpdateBsc2JavBmvParams(dstChainConfig, srcContractsConfig.bmc)

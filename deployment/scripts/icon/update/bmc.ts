@@ -6,7 +6,7 @@ async function upgradeBmc(config: BTP2Config) {
     const contractsConfig = config.contractsConfig.getContract()
     const iconNetwork = IconNetwork.getNetwork(chainConfig);
 
-    const content = Jar.readFromFile(JAVASCORE_PATH, "bmc");
+    const content = Jar.readFromProject(JAVASCORE_PATH, "bmc");
     const bmc = new Contract(iconNetwork)
     const updateBmcTxHash = await bmc.update({
         content: content,
