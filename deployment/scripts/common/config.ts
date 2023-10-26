@@ -96,7 +96,6 @@ export class BTP2Config {
   }(this);
 
   public save() {
-    console.log(this.config)
     fs.writeFileSync(this.path, JSON.stringify(this.config), 'utf-8')
   }
 

@@ -76,7 +76,6 @@ async function main() {
 
     //Remove Link
     await removeVerifier(srcConfig, dstConfig)
-    srcConfig.save()
 
     const dstChainConfig = dstConfig.chainConfig.getChain()
     srcConfig.contractsConfig.addBmv(dstChainConfig.id, dstChainConfig.type, bmvAddr)
@@ -84,7 +83,6 @@ async function main() {
 
     //Setup bmv link
     await addVerifier(srcConfig, dstConfig)
-    srcConfig.save()
 }
 
 main().catch((error) => {

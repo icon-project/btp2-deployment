@@ -41,7 +41,7 @@ Network information required to configure the BTP2 network
 
 | Key            | Description                                            | Require   |
 |:---------------|:-------------------------------------------------------|:----------|
-| id             | Network ID                                             | ALL       |
+| id             | Chain network ID                                       | ALL       |
 | network        | Network address (nid.network)                          | ALL       |
 | endpoint       | Network endpoint                                       | ALL       |
 | keystore       | Deployer keystore                                      | ICON ONLY |
@@ -50,7 +50,7 @@ Network information required to configure the BTP2 network
 | type           | BTP2 contract type                                     | ALL       |
 
 #### Support type
-
+{`Network Type`}-{`BMV Type`}-{`Network language Type`}
 * ICON
     * icon-btpblock-java
     * icon-bridge-java

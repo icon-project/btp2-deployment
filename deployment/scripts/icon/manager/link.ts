@@ -1,25 +1,31 @@
 import {BTP2Config} from "../../common/config";
-import {addLink, removeLink} from "./manager";
+import {addLink, getLink, removeLink} from "./manager";
 
 
 
 async function main() {
-    if (process.env.srcNetworkPath === undefined || process.env.dstNetworkPath === undefined ||
-        process.env.method === undefined) {
+    if (process.env.srcNetworkPath === undefined || process.env.method === undefined) {
         console.log("invalid args")
         return
     }
 
     const srcConfig = new BTP2Config(process.env.srcNetworkPath);
-    const dstConfig = new BTP2Config(process.env.dstNetworkPath);
 
-    if (process.env.method == "add") {
-        if (process.env.networkId === undefined) {
+    if (process.env.method == "get") {
+        await getLink(srcConfig)
+    }else if (process.env.method == "add") {
+        if (process.env.dstNetworkPath === undefined || process.env.srcNetworkId === undefined) {
             console.log("invalid args")
             return
         }
-        await addLink(srcConfig, dstConfig, process.env.networkId)
+        const dstConfig = new BTP2Config(process.env.dstNetworkPath);
+        await addLink(srcConfig, dstConfig, process.env.srcNetworkId)
     }else if (process.env.method == "remove") {
+        if (process.env.dstNetworkPath === undefined) {
+            console.log("invalid args")
+            return
+        }
+        const dstConfig = new BTP2Config(process.env.dstNetworkPath);
         await removeLink(srcConfig, dstConfig)
     }else{
         console.log("invalid method")

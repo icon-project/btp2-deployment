@@ -93,8 +93,8 @@ make build-all
 It compiles both Java and Solidity contracts and generates artifacts for later deployment.
 
 
-### Deploy
-Describes contract deployment.
+### Deployment Step
+Describes contract Deployment Step.
 > **Note**
 > In the case of solidity contact, files created in the ${PROJECT_ROOT}/deployment/.openzeppelin path must be
 > managed because openzeppelin is being used for contract upgradeable.
@@ -113,7 +113,7 @@ make icon-deploy-bmc srcNetworkPath=./berlin.json
 make eth-deploy-bmc srcNetworkPath=./bsc.json
 ```
 #### Open BTP Network
-Proceed with OpenBTPNetwork using the deployed BMC contract address and obtain the Network ID.
+Proceed with OpenBTPNetwork using the deployed BMC contract address and obtain the BTPNetworkID.
 
 #### BMV Deploy
 To deploy a BMV contract, set up and execute the network configuration path and other data to deploy the following commands.
@@ -124,13 +124,33 @@ To deploy a BMV contract, set up and execute the network configuration path and 
 
 * ICON
 ```
-make icon-deploy-bmv srcNetworkPath=./berlin.json dstNetworkPath=./bsc.json networkId=0x1 networkTypeId=0x1
+make icon-deploy-bmv srcNetworkPath=./berlin.json dstNetworkPath=./bsc.json
 ```
+> **Note**
+> When the BMV Type of the destination network is ‘btpblock’ 
+> <br/>[[BMV Deploy]](doc/contract_deploy.md#bmv-deploy)
+
 
 * ETH
 ```
 make eth-deploy-bmv srcNetworkPath=./bsc.json dstNetworkPath=./berlin.json networkId=0x1 networkTypeId=0x1
 ```
+> **Note**
+> When the BMV Type of the destination network is ‘bridge’
+> <br/>[[BMV Deploy]](doc/contract_deploy.md#bmv-deploy)
+
+#### Add Link
+To connect between networks, run the following command.
+* ICON
+```
+make icon-manager-link srcNetworkPath=./berlin.json dstNetworkPath=./bsc.json srcNetworkId=0x1 method=add
+```
+
+* ETH
+```
+make eth-manager-link srcNetworkPath=./bsc.json dstNetworkPath=./berlin.json method=add
+```
+
 
 #### XCALL Deploy
 To deploy a Xcall contract, set the network configuration path to deploy and run the following command.
@@ -159,4 +179,16 @@ make icon-deploy-dapp srcNetworkPath=./berlin.json
 * ETH
 ```
 make eth-deploy-dapp srcNetworkPath=./bsc.json
+```
+
+#### Add Relay
+To register a relay address, run the following command.
+* ICON
+```
+make icon-manager-relay srcNetworkPath=./berlin.json dstNetworkPath=./bsc.json address=hx1234... method=add
+```
+
+* ETH
+```
+make eth-manager-relay srcNetworkPath=./bsc.json dstNetworkPath=./berlin.json address=1234... method=add
 ```

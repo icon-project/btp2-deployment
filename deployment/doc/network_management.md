@@ -13,7 +13,7 @@ BTP2 Network Management CLI
 ```
 make icon-manager-reward \
 srcNetworkPath=./ICON_NETWORK_CONFIG.json \
-dstNetworkPath=./BSC_NETWORK_CONFIG.json \
+dstNetworkPath=./ETH_NETWORK_CONFIG.json \
 method=get
 ```
 
@@ -21,7 +21,7 @@ method=get
 
 ```
 make eth-manager-reward \
-srcNetworkPath=./BSC_NETWORK_CONFIG.json \
+srcNetworkPath=./ETH_NETWORK_CONFIG.json \
 dstNetworkPath=./ICON_NETWORK_CONFIG.json \
 method=get
 ```
@@ -43,7 +43,7 @@ method=get
 ```
 make icon-manager-reward \
 srcNetworkPath=./ICON_NETWORK_CONFIG.json \
-dstNetworkPath=./BSC_NETWORK_CONFIG.json \
+dstNetworkPath=./ETH_NETWORK_CONFIG.json \
 address=0x123... \
 method=claim
 ```
@@ -52,9 +52,9 @@ method=claim
 
 ```
 make eth-manager-reward \
-srcNetworkPath=./BSC_NETWORK_CONFIG.json \
+srcNetworkPath=./ETH_NETWORK_CONFIG.json \
 dstNetworkPath=./ICON_NETWORK_CONFIG.json \
-address=hx123... \
+address=hx1234... \
 method=claim
 ```
 
@@ -67,6 +67,34 @@ method=claim
 | address        | String | Account address                             |
 | method         | String | method                                      |
 
+### Get Links
+
+[IIP - Get Links](https://github.com/icon-project/IIPs/blob/master/IIPS/iip-25.md#getlinks)
+
+* ICON
+
+```
+make icon-manager-link \
+srcNetworkPath=./ICON_NETWORK_CONFIG.json
+method=get
+```
+
+* ETH
+
+```
+make eth-manager-link \
+srcNetworkPath=./ETH_NETWORK_CONFIG.json
+method=get
+```
+
+#### Environment
+
+| Name           | Type   | Description                                 |
+|:---------------|:-------|:--------------------------------------------|
+| srcNetworkPath | String | Source Network Configuration file path      |
+| dstNetworkPath | String | Destination Network Configuration file path |
+| method         | String | method                                      |                                      
+
 ### Add Link
 
 [IIP - Add Link](https://github.com/icon-project/IIPs/blob/master/IIPS/iip-25.md#addlink)
@@ -76,28 +104,28 @@ method=claim
 ```
 make icon-manager-link \
 srcNetworkPath=./ICON_NETWORK_CONFIG.json \
-dstNetworkPath=./BSC_NETWORK_CONFIG.json \
-networkId=0x1 \
+dstNetworkPath=./ETH_NETWORK_CONFIG.json \
+srcNetworkId=0x1 \
 method=add
 ```
 
 * ETH
 
 ```
-make eth-manager-reward \
-srcNetworkPath=./BSC_NETWORK_CONFIG.json \
+make eth-manager-link \
+srcNetworkPath=./ETH_NETWORK_CONFIG.json \
 dstNetworkPath=./ICON_NETWORK_CONFIG.json \
 method=add
 ```
 
 #### Environment
 
-| Name           | Type        | Description                                 |
-|:---------------|:------------|:--------------------------------------------|
-| srcNetworkPath | String      | Source Network Configuration file path      |
-| dstNetworkPath | String      | Destination Network Configuration file path |
-| networkId      | Hexadecimal | BTP2 Network ID                             |
-| method         | String      | method                                      |
+| Name           | Type        | Description                                                      |
+|:---------------|:------------|:-----------------------------------------------------------------|
+| srcNetworkPath | String      | Source Network Configuration file path                           |
+| dstNetworkPath | String      | Destination Network Configuration file path                      |
+| srcNetworkId   | Hexadecimal | Opened BTPNetworkID of destination network in the source network |
+| method         | String      | method                                                           |
 
 ### Remove Link
 
@@ -108,7 +136,7 @@ method=add
 ```
 make icon-manager-link \
 srcNetworkPath=./ICON_NETWORK_CONFIG.json \
-dstNetworkPath=./BSC_NETWORK_CONFIG.json \
+dstNetworkPath=./ETH_NETWORK_CONFIG.json \
 method=remove
 ```
 
@@ -116,7 +144,7 @@ method=remove
 
 ```
 make eth-manager-reward \
-srcNetworkPath=./BSC_NETWORK_CONFIG.json \
+srcNetworkPath=./ETH_NETWORK_CONFIG.json \
 dstNetworkPath=./ICON_NETWORK_CONFIG.json \
 method=remove
 ```
@@ -138,17 +166,15 @@ method=remove
 ```
 make icon-manager-getStatus \
 srcNetworkPath=./ICON_NETWORK_CONFIG.json \
-dstNetworkPath=./BSC_NETWORK_CONFIG.json \
-method=set
+dstNetworkPath=./ETH_NETWORK_CONFIG.json \
 ```
 
 * ETH
 
 ```
 make eth-manager-getStatus \
-srcNetworkPath=./BSC_NETWORK_CONFIG.json \
+srcNetworkPath=./ETH_NETWORK_CONFIG.json \
 dstNetworkPath=./ICON_NETWORK_CONFIG.json \
-method=set
 ```
 
 #### Environment
@@ -157,7 +183,6 @@ method=set
 |:---------------|:-------|:--------------------------------------------|
 | srcNetworkPath | String | Source Network Configuration file path      |
 | dstNetworkPath | String | Destination Network Configuration file path |
-| method         | String | method                                      |
 
 ### Get Services
 
@@ -175,7 +200,7 @@ method=get
 
 ```
 make eth-manager-service \
-srcNetworkPath=./BSC_NETWORK_CONFIG.json \
+srcNetworkPath=./ETH_NETWORK_CONFIG.json \
 method=get
 ```
 
@@ -204,7 +229,7 @@ method=add
 
 ```
 make eth-manager-service \
-srcNetworkPath=./BSC_NETWORK_CONFIG.json \
+srcNetworkPath=./ETH_NETWORK_CONFIG.json \
 service=service_name \
 addresss=0xabcd... \
 method=add
@@ -236,7 +261,7 @@ method=remove
 
 ```
 make eth-manager-service \
-srcNetworkPath=./BSC_NETWORK_CONFIG.json \
+srcNetworkPath=./ETH_NETWORK_CONFIG.json \
 service=service_name \
 method=remove
 ```
@@ -267,7 +292,7 @@ method=get
 
 ```
 make eth-manager-mode \
-srcNetworkPath=./BSC_NETWORK_CONFIG.json \
+srcNetworkPath=./ETH_NETWORK_CONFIG.json \
 method=get
 ```
 
@@ -280,7 +305,7 @@ method=get
 
 ### Set Mode
 
-Called by the operator to manage the BTP network.
+Called by the operator to manage the BTPNetwork.
 
 * ICON
 
@@ -294,7 +319,7 @@ method=set
 
 ```
 make eth-manager-mode \
-srcNetworkPath=./BSC_NETWORK_CONFIG.json \
+srcNetworkPath=./ETH_NETWORK_CONFIG.json \
 method=set
 ```
 
@@ -306,7 +331,9 @@ method=set
 | method         | String | method                                 |
 
 ### Get Verifiers
+
 Get registered verifiers.
+
 * ICON
 
 ```
@@ -319,18 +346,19 @@ method=get
 
 ```
 make eth-manager-verifier \
-srcNetworkPath=./BSC_NETWORK_CONFIG.json
+srcNetworkPath=./ETH_NETWORK_CONFIG.json
 method=get
 ```
 
 #### Environment
 
-| Name           | Type   | Description                                 |
-|:---------------|:-------|:--------------------------------------------|
-| srcNetworkPath | String | Source Network Configuration file path      |
-| method         | String | method                                      |
+| Name           | Type   | Description                            |
+|:---------------|:-------|:---------------------------------------|
+| srcNetworkPath | String | Source Network Configuration file path |
+| method         | String | method                                 |
 
 ### Add Verifier
+
 Registers BMV for the network
 
 * ICON
@@ -338,7 +366,7 @@ Registers BMV for the network
 ```
 make icon-manager-verifier \
 srcNetworkPath=./ICON_NETWORK_CONFIG.json \
-dstNetworkPath=./BSC_NETWORK_CONFIG.json \
+dstNetworkPath=./ETH_NETWORK_CONFIG.json \
 method=add
 ```
 
@@ -346,7 +374,7 @@ method=add
 
 ```
 make eth-manager-verifier \
-srcNetworkPath=./BSC_NETWORK_CONFIG.json \
+srcNetworkPath=./ETH_NETWORK_CONFIG.json \
 dstNetworkPath=./ICON_NETWORK_CONFIG.json \
 method=add
 ```
@@ -368,7 +396,7 @@ Unregisters BMV for the network.
 ```
 make icon-manager-verifier \
 srcNetworkPath=./ICON_NETWORK_CONFIG.json \
-dstNetworkPath=./BSC_NETWORK_CONFIG.json \
+dstNetworkPath=./ETH_NETWORK_CONFIG.json \
 method=remove
 ```
 
@@ -376,7 +404,7 @@ method=remove
 
 ```
 make eth-manager-verifier \
-srcNetworkPath=./BSC_NETWORK_CONFIG.json \
+srcNetworkPath=./ETH_NETWORK_CONFIG.json \
 dstNetworkPath=./ICON_NETWORK_CONFIG.json \
 method=remove
 ```
@@ -387,4 +415,100 @@ method=remove
 |:---------------|:-------|:--------------------------------------------|
 | srcNetworkPath | String | Source Network Configuration file path      |
 | dstNetworkPath | String | Destination Network Configuration file path |
+| method         | String | method                                      |
+
+### Get Relays
+
+Get status of registered relays by link
+
+* ICON
+
+```
+make icon-manager-relay \
+srcNetworkPath=./ICON_NETWORK_CONFIG.json \
+dstNetworkPath=./ETH_NETWORK_CONFIG.json \
+method=get
+```
+
+* ETH
+
+```
+make eth-manager-relay \
+srcNetworkPath=./ETH_NETWORK_CONFIG.json \
+dstNetworkPath=./ICON_NETWORK_CONFIG.json \
+method=set
+```
+
+#### Environment
+
+| Name           | Type   | Description                                 |
+|:---------------|:-------|:--------------------------------------------|
+| srcNetworkPath | String | Source Network Configuration file path      |
+| dstNetworkPath | String | Destination Network Configuration file path |
+| method         | String | method                                      |
+
+### Add Relay
+
+Registers relay for the network.
+
+* ICON
+
+```
+make icon-manager-relay \
+srcNetworkPath=./ICON_NETWORK_CONFIG.json \
+dstNetworkPath=./ETH_NETWORK_CONFIG.json \
+address=hx1234... \
+method=add
+```
+
+* ETH
+
+```
+make eth-manager-relay \
+srcNetworkPath=./ETH_NETWORK_CONFIG.json \
+dstNetworkPath=./ICON_NETWORK_CONFIG.json \
+address=1234...
+method=add
+```
+
+#### Environment
+
+| Name           | Type   | Description                                 |
+|:---------------|:-------|:--------------------------------------------|
+| srcNetworkPath | String | Source Network Configuration file path      |
+| dstNetworkPath | String | Destination Network Configuration file path |
+| address        | String | Relay account address                       |
+| method         | String | method                                      |
+
+### Remove Relay
+
+Unregisters relay for the network.
+
+* ICON
+
+```
+make icon-manager-relay \
+srcNetworkPath=./ICON_NETWORK_CONFIG.json \
+dstNetworkPath=./ETH_NETWORK_CONFIG.json \
+address=hx1234... \
+method=remove
+```
+
+* ETH
+
+```
+make eth-manager-relay \
+srcNetworkPath=./ETH_NETWORK_CONFIG.json \
+dstNetworkPath=./ICON_NETWORK_CONFIG.json \
+address=abcd...
+method=remove
+```
+
+#### Environment
+
+| Name           | Type   | Description                                 |
+|:---------------|:-------|:--------------------------------------------|
+| srcNetworkPath | String | Source Network Configuration file path      |
+| dstNetworkPath | String | Destination Network Configuration file path |
+| address        | String | Relay account address                       |
 | method         | String | method                                      |

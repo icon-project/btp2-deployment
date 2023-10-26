@@ -77,8 +77,8 @@ eth-deploy-bmv:
 	@ echo ">>> Deploy ETH BMC contracts" ; \
 	srcNetworkPath=$(srcNetworkPath) \
 	dstNetworkPath=$(dstNetworkPath) \
-	networkTypeId=$(networkTypeId) \
-	networkId=$(networkId) \
+	dstNetworkTypeId=$(dstNetworkTypeId) \
+	dstNetworkId=$(dstNetworkId) \
 	$(HARDHAT) run scripts/eth/deploy/bmv.ts
 
 eth-deploy-xcall:
@@ -173,6 +173,14 @@ eth-manager-verifier:
  	method=$(method) \
 	$(HARDHAT) run scripts/eth/manager/verifier.ts
 
+eth-manager-relay:
+	@ echo ">>> ETH ${method}Relay  " ; \
+ 	srcNetworkPath=$(srcNetworkPath) \
+ 	dstNetworkPath=$(dstNetworkPath) \
+ 	address=$(address) \
+ 	method=$(method) \
+	$(HARDHAT) run scripts/eth/manager/relay.ts
+
 #ICON
 icon-deploy-bmc:
 	@ echo ">>> Deploy ICON BMC contracts" ; \
@@ -182,7 +190,8 @@ icon-deploy-bmv:
 	@ echo ">>> Deploy ICON BMV contracts" ; \
 	srcNetworkPath=$(srcNetworkPath) \
 	dstNetworkPath=$(dstNetworkPath) \
-	networkId=$(networkId) \
+	dstNetworkId=$(dstNetworkId) \
+	dstNetworkTypeId=$(dstNetworkTypeId) \
 	$(HARDHAT) run scripts/icon/deploy/bmv.ts
 
 icon-deploy-xcall:
@@ -242,7 +251,7 @@ icon-manager-link:
 	@ echo ">>> ICON ${method}Link  " ; \
  	srcNetworkPath=$(srcNetworkPath) \
  	dstNetworkPath=$(dstNetworkPath) \
- 	networkId=$(networkId) \
+ 	srcNetworkId=$(srcNetworkId) \
  	method=$(method) \
 	$(HARDHAT) run scripts/icon/manager/link.ts
 
@@ -273,6 +282,14 @@ icon-manager-verifier:
  	method=$(method) \
 	$(HARDHAT) run scripts/icon/manager/verifier.ts
 
+icon-manager-relay:
+	@ echo ">>> ICON ${method}Relay  " ; \
+ 	 	srcNetworkPath=$(srcNetworkPath) \
+     	dstNetworkPath=$(dstNetworkPath) \
+     	address=$(address) \
+     	method=$(method) \
+	$(HARDHAT) run scripts/icon/manager/relay.ts
+
 #xCall Multi
 xcall-multi-deploy:
 	@ echo ">>> xcall multi deploy" ; \
@@ -285,5 +302,5 @@ xcall-multi-dapp-deploy:
 
 
 xcall-multi-set-connection:
-	@ echo ">>> xcall multi dapp deploy" ; \
-	srcNetworkPath=$(srcNetworkPath) dstNetworkPath=$(dstNetworkPath) $(HARD
+	@ echo ">>> xcall multi set connection" ; \
+	srcNetworkPath=$(srcNetworkPath) dstNetworkPath=$(dstNetworkPath) $(HARDHAT) run scripts/icon/manager/xcall_multi_set_connection.ts

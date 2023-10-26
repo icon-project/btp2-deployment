@@ -3,6 +3,50 @@ import {setEthNetwork} from "../../common/eth/network";
 import {ethers} from "hardhat";
 import {BigNumber} from "ethers";
 
+export async function getRelays(srcConfig: BTP2Config, dstConfig: BTP2Config){
+    const srcChainConfig = srcConfig.chainConfig.getChain()
+    const srcContractsConfig = srcConfig.contractsConfig.getContract()
+    const dstChainConfig = dstConfig.chainConfig.getChain()
+    const dstContractsConfig = dstConfig.contractsConfig.getContract()
+    setEthNetwork(srcChainConfig.hardhatNetwork)
+    const bmcm = await ethers.getContractAt('BMCManagement', srcContractsConfig.bmcm)
+    const dstBmcAddr = getBtpAddress(dstChainConfig.network, dstContractsConfig.bmc);
+    console.log(`${srcChainConfig.id}: getRelays`)
+    const relays = await bmcm.getRelays(dstBmcAddr)
+    console.log(relays)
+}
+
+export async function addRelay(srcConfig: BTP2Config, dstConfig: BTP2Config, address: string) {
+    const srcChainConfig = srcConfig.chainConfig.getChain()
+    const srcContractsConfig = srcConfig.contractsConfig.getContract()
+    const dstChainConfig = dstConfig.chainConfig.getChain()
+    const dstContractsConfig = dstConfig.contractsConfig.getContract()
+    setEthNetwork(srcChainConfig.hardhatNetwork)
+    const bmcm = await ethers.getContractAt('BMCManagement', srcContractsConfig.bmcm)
+    const dstBmcAddr = getBtpAddress(dstChainConfig.network, dstContractsConfig.bmc);
+
+    console.log(`${srcChainConfig.id}: addVerifier for ${dstChainConfig.network}`)
+    await bmcm.addRelay(dstBmcAddr, address, {gasLimit:600000})
+        .then((tx: { wait: (arg0: number) => any; }) => {
+            return tx.wait(1)
+        });
+}
+
+export async function removeRelay(srcConfig: BTP2Config, dstConfig: BTP2Config, address: string) {
+    const srcChainConfig = srcConfig.chainConfig.getChain()
+    const srcContractsConfig = srcConfig.contractsConfig.getContract()
+    const dstChainConfig = dstConfig.chainConfig.getChain()
+    const dstContractsConfig = dstConfig.contractsConfig.getContract()
+    setEthNetwork(srcChainConfig.hardhatNetwork)
+    const bmcm = await ethers.getContractAt('BMCManagement', srcContractsConfig.bmcm)
+    const dstBmcAddr = getBtpAddress(dstChainConfig.network, dstContractsConfig.bmc);
+
+    console.log(`${srcChainConfig.id}: removeVerifier for ${dstChainConfig.network}`)
+    await bmcm.removeRelay(dstBmcAddr, address, {gasLimit:600000})
+        .then((tx: { wait: (arg0: number) => any; }) => {
+            return tx.wait(1)
+        });
+}
 export async function addOwner( config: BTP2Config, signerIndex: number, addAddr: string) {
     const chainConfig = config.chainConfig.getChain()
     const contractsConfig = config.contractsConfig.getContract()
@@ -170,6 +214,7 @@ export async function removeVerifier(srcConfig: BTP2Config, dstConfig: BTP2Confi
 
 
     srcConfig.contractsConfig.removeBmv(dstChainConfig.id)
+    srcConfig.save()
 }
 
 export async function addVerifier(srcConfig: BTP2Config, dstConfig: BTP2Config){
@@ -186,6 +231,7 @@ export async function addVerifier(srcConfig: BTP2Config, dstConfig: BTP2Config){
         .then((tx: { wait: (arg0: number) => any; }) => {
             return tx.wait(1)
         });
+    srcConfig.save()
 }
 export async function removeLink(srcConfig: BTP2Config, dstConfig: BTP2Config){
     const srcChainConfig = srcConfig.chainConfig.getChain()
@@ -197,15 +243,6 @@ export async function removeLink(srcConfig: BTP2Config, dstConfig: BTP2Config){
     const bmcm = await ethers.getContractAt('BMCManagement', srcContractsConfig.bmcm)
     const dstBmcAddr = getBtpAddress(dstChainConfig.network, dstContractsConfig.bmc);
 
-    console.log(`${srcChainConfig.id}: remove route for ${dstBmcAddr}`)
-    await bmcm.removeRoute(dstBmcAddr, {gasLimit:600000})
-        .then((tx) => tx.wait(1))
-        .then((receipt) => {
-            if (receipt.status != 1) {
-                console.log(`Failed to remove route: ${receipt.transactionHash}`);
-            }
-        })
-
     console.log(`${srcChainConfig.id}: removeLink for ${dstBmcAddr}`)
     await bmcm.removeLink(dstBmcAddr ,{gasLimit:600000})
         .then((tx) => tx.wait(1))
@@ -216,20 +253,20 @@ export async function removeLink(srcConfig: BTP2Config, dstConfig: BTP2Config){
             return receipt;
         })
 
-    console.log(`${srcChainConfig.id}: removeVerifier for ${dstChainConfig.id}`)
-    await bmcm.removeVerifier(dstChainConfig.network, {gasLimit:600000})
-        .then((tx) => tx.wait(1))
-        .then((receipt) => {
-            if (receipt.status != 1) {
-                throw new Error(`Failed to removeVerifier: ${receipt.transactionHash}`);
-            }
-            return receipt;
-        })
-
     srcConfig.linksConfing.removeLink(dstChainConfig.id)
-    srcConfig.contractsConfig.removeBmv(dstChainConfig.id)
+    srcConfig.save()
 }
 
+export async function getLink(srcConfig: BTP2Config){
+    const srcChainConfig = srcConfig.chainConfig.getChain()
+    const srcContractsConfig = srcConfig.contractsConfig.getContract()
+    setEthNetwork(srcChainConfig.hardhatNetwork)
+    const bmcm = await ethers.getContractAt('BMCManagement', srcContractsConfig.bmcm)
+
+    console.log(`${srcChainConfig.id}: getLink`)
+    const links =  await bmcm.getLinks();
+    console.log(links)
+}
 export async function addLink(srcConfig: BTP2Config, dstConfig: BTP2Config){
     const srcChainConfig = srcConfig.chainConfig.getChain()
     const srcContractsConfig = srcConfig.contractsConfig.getContract()
@@ -239,22 +276,9 @@ export async function addLink(srcConfig: BTP2Config, dstConfig: BTP2Config){
     const bmcm = await ethers.getContractAt('BMCManagement', srcContractsConfig.bmcm)
     const dstBmcAddr = getBtpAddress(dstChainConfig.network, dstContractsConfig.bmc);
 
-    console.log(`${srcChainConfig.id}: addVerifier for ${dstChainConfig.network}`)
-    const bmvAddress = srcConfig.contractsConfig.getBmv(dstChainConfig.id).address
-    await bmcm.addVerifier(dstChainConfig.network, bmvAddress, {gasLimit:600000})
-        .then((tx: { wait: (arg0: number) => any; }) => {
-            return tx.wait(1)
-        });
 
     console.log(`${srcChainConfig.id}: addLink: ${dstBmcAddr}`)
     await bmcm.addLink(dstBmcAddr, {gasLimit:600000})
-        .then((tx: { wait: (arg0: number) => any; }) => {
-            return tx.wait(1)
-        });
-
-    console.log(`${srcChainConfig.id}: addRelay`)
-    const signers = await ethers.getSigners()
-    await bmcm.addRelay(dstBmcAddr, signers[0].getAddress(), {gasLimit:600000})
         .then((tx: { wait: (arg0: number) => any; }) => {
             return tx.wait(1)
         });
@@ -263,6 +287,7 @@ export async function addLink(srcConfig: BTP2Config, dstConfig: BTP2Config){
         'network' : dstChainConfig.network,
         'bmc' : dstContractsConfig.bmc
     })
+    srcConfig.save()
 }
 
 export async function getReward(srcConfig: BTP2Config, dstConfig: BTP2Config){
@@ -313,40 +338,40 @@ export async function getStatus(srcConfig: BTP2Config, dstConfig: BTP2Config){
     return status
 }
 
-export async function setupLink(srcConfig: BTP2Config, dstConfig: BTP2Config, networkTypeId: string, networkId: string) {
-    const srcChainConfig = srcConfig.chainConfig.getChain()
-    const srcContractsConfig = srcConfig.contractsConfig.getContract()
-    const dstChainConfig = dstConfig.chainConfig.getChain()
-    const dstContractsConfig = dstConfig.contractsConfig.getContract()
-    setEthNetwork(srcChainConfig.hardhatNetwork)
-    const bmcm = await ethers.getContractAt('BMCManagement', srcContractsConfig.bmcm)
-    const dstBmcAddr = getBtpAddress(dstChainConfig.network, dstContractsConfig.bmc);
-
-    console.log(`${srcChainConfig.id}: addVerifier for ${dstChainConfig.network}`)
-    const bmvAddress = srcConfig.contractsConfig.getBmv(dstChainConfig.id).address
-    await bmcm.addVerifier(dstChainConfig.network, bmvAddress, {gasLimit:600000})
-        .then((tx: { wait: (arg0: number) => any; }) => {
-            return tx.wait(1)
-        });
-
-    console.log(`${srcChainConfig.id}: addLink: ${dstBmcAddr}`)
-    await bmcm.addLink(dstBmcAddr, {gasLimit:600000})
-        .then((tx: { wait: (arg0: number) => any; }) => {
-            return tx.wait(1)
-        });
-
-    console.log(`${srcChainConfig.id}: addRelay`)
-    const signers = await ethers.getSigners()
-    await bmcm.addRelay(dstBmcAddr, signers[0].getAddress(), {gasLimit:600000})
-        .then((tx: { wait: (arg0: number) => any; }) => {
-            return tx.wait(1)
-        });
-
-    srcConfig.linksConfing.addLink(dstChainConfig.id, {
-        'network' : dstChainConfig.network,
-        'networkTypeId' : networkTypeId,
-        'networkId' : networkId,
-        'bmc' : dstContractsConfig.bmc
-    })
-
-}
+// export async function setupLink(srcConfig: BTP2Config, dstConfig: BTP2Config, networkTypeId: string, networkId: string) {
+//     const srcChainConfig = srcConfig.chainConfig.getChain()
+//     const srcContractsConfig = srcConfig.contractsConfig.getContract()
+//     const dstChainConfig = dstConfig.chainConfig.getChain()
+//     const dstContractsConfig = dstConfig.contractsConfig.getContract()
+//     setEthNetwork(srcChainConfig.hardhatNetwork)
+//     const bmcm = await ethers.getContractAt('BMCManagement', srcContractsConfig.bmcm)
+//     const dstBmcAddr = getBtpAddress(dstChainConfig.network, dstContractsConfig.bmc);
+//
+//     console.log(`${srcChainConfig.id}: addVerifier for ${dstChainConfig.network}`)
+//     const bmvAddress = srcConfig.contractsConfig.getBmv(dstChainConfig.id).address
+//     await bmcm.addVerifier(dstChainConfig.network, bmvAddress, {gasLimit:600000})
+//         .then((tx: { wait: (arg0: number) => any; }) => {
+//             return tx.wait(1)
+//         });
+//
+//     console.log(`${srcChainConfig.id}: addLink: ${dstBmcAddr}`)
+//     await bmcm.addLink(dstBmcAddr, {gasLimit:600000})
+//         .then((tx: { wait: (arg0: number) => any; }) => {
+//             return tx.wait(1)
+//         });
+//
+//     console.log(`${srcChainConfig.id}: addRelay`)
+//     const signers = await ethers.getSigners()
+//     await bmcm.addRelay(dstBmcAddr, signers[0].getAddress(), {gasLimit:600000})
+//         .then((tx: { wait: (arg0: number) => any; }) => {
+//             return tx.wait(1)
+//         });
+//
+//     srcConfig.linksConfing.addLink(dstChainConfig.id, {
+//         'network' : dstChainConfig.network,
+//         'networkTypeId' : networkTypeId,
+//         'networkId' : networkId,
+//         'bmc' : dstContractsConfig.bmc
+//     })
+//
+// }

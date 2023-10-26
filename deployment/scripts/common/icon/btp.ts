@@ -105,6 +105,26 @@ export class BMC extends Contract {
     })
   }
 
+  addRoute(link: string, dst: string) {
+    return this.invoke({
+      method: 'addRoute',
+      params: {
+        _link: link,
+        _dst: dst
+      }
+    })
+  }
+
+  removeRelay(link: string, address: string) {
+    return this.invoke({
+      method: 'removeRelay',
+      params: {
+        _link: link,
+        _addr: address
+      }
+    })
+  }
+
   removeService(service: string) {
     return this.invoke({
       method: 'removeService',

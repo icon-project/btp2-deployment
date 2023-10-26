@@ -2,7 +2,7 @@ import { ethers  } from 'hardhat';
 import {BTP2Config, getBtpAddress} from "../../common/config";
 import {setEthNetwork} from "../../common/eth/network"
 import {getFirstBtpBlockHeader, getLastBlockNumber} from "../../common/icon/bmv_param"
-import {setupLink} from "../manager/manager";
+import {addVerifier} from "../manager/manager";
 
 async function deployBridgeBmv(srcConfig: BTP2Config, dstConfig: BTP2Config) {
     const srcChainConfig = srcConfig.chainConfig.getChain()
@@ -36,7 +36,7 @@ async function deployBTPBlockBmv(srcConfig: BTP2Config, dstConfig: BTP2Config, n
 
 async function main() {
     if (process.env.srcNetworkPath === undefined || process.env.dstNetworkPath === undefined
-        || process.env.networkTypeId === undefined || process.env.networkId === undefined) {
+        || process.env.dstNetworkTypeId === undefined || process.env.dstNetworkId === undefined) {
         console.log("invalid args")
         return
     }
@@ -52,13 +52,13 @@ async function main() {
             await deployBridgeBmv(srcConfig, dstConfig)
             break;
         case 'btpblock':
-            await deployBTPBlockBmv(srcConfig, dstConfig, process.env.networkTypeId, process.env.networkId)
+            await deployBTPBlockBmv(srcConfig, dstConfig, process.env.dstNetworkTypeId, process.env.dstNetworkId)
             break;
         default:
             throw new Error(`Unknown bmv type: ${dstConfig.chainConfig.getBmvType()}`);
     }
 
-    await setupLink(srcConfig, dstConfig, process.env.networkTypeId, process.env.networkId)
+    await addVerifier(srcConfig, dstConfig)
     srcConfig.save()
 
 }

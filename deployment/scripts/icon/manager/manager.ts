@@ -8,6 +8,62 @@ function getBMCContract(config: BTP2Config) {
     return  new BMC(network, contractsConfig.bmc);
 }
 
+
+export async function getRelays(srcConfig: BTP2Config, dstConfig: BTP2Config){
+    const srcChainConfig = srcConfig.chainConfig.getChain()
+    const srcContractsConfig = srcConfig.contractsConfig.getContract()
+    const dstChainConfig = dstConfig.chainConfig.getChain()
+    const dstContractsConfig = dstConfig.contractsConfig.getContract()
+    const dstBmcAddr = getBtpAddress(dstChainConfig.network, dstContractsConfig.bmc);
+
+    const srcNetwork = IconNetwork.getNetwork(srcChainConfig);
+    const bmc = new BMC(srcNetwork, srcContractsConfig.bmc);
+    console.log(`${srcChainConfig.id}: getRelays`)
+    const relays = await bmc.getRelays(dstBmcAddr)
+    console.log(relays)
+}
+
+export async function addRelay(srcConfig: BTP2Config, dstConfig: BTP2Config, address: string) {
+    const srcChainConfig = srcConfig.chainConfig.getChain()
+    const srcContractsConfig = srcConfig.contractsConfig.getContract()
+    const dstChainConfig = dstConfig.chainConfig.getChain()
+    const dstContractsConfig = dstConfig.contractsConfig.getContract()
+
+    const srcNetwork = IconNetwork.getNetwork(srcChainConfig);
+    const bmc = new BMC(srcNetwork, srcContractsConfig.bmc);
+    const dstBmcAddr = getBtpAddress(dstChainConfig.network, dstContractsConfig.bmc);
+
+    console.log(`${srcChainConfig.id}: addRelay`)
+    await bmc.addRelay(dstBmcAddr, address)
+        .then((txHash) => bmc.getTxResult(txHash))
+        .then((result) => {
+            if (result.status != 1) {
+                throw new Error(`ICON: failed to addRelay: ${result.txHash}`);
+            }
+        })
+}
+
+export async function removeRelay(srcConfig: BTP2Config, dstConfig: BTP2Config, address: string) {
+    const srcChainConfig = srcConfig.chainConfig.getChain()
+    const srcContractsConfig = srcConfig.contractsConfig.getContract()
+    const dstChainConfig = dstConfig.chainConfig.getChain()
+    const dstContractsConfig = dstConfig.contractsConfig.getContract()
+
+    const srcNetwork = IconNetwork.getNetwork(srcChainConfig);
+    const bmc = new BMC(srcNetwork, srcContractsConfig.bmc);
+    const dstBmcAddr = getBtpAddress(dstChainConfig.network, dstContractsConfig.bmc);
+
+    console.log(`${srcChainConfig.id}: removeRelay`)
+    await bmc.removeRelay(dstBmcAddr, address)
+        .then((txHash) => bmc.getTxResult(txHash))
+        .then((result) => {
+            if (result.status != 1) {
+                throw new Error(`ICON: failed to removeRelay: ${result.txHash}`);
+            }
+        })
+}
+
+
 export async function getVerifiers(srcConfig: BTP2Config){
     const srcChainConfig = srcConfig.chainConfig.getChain()
     const srcContractsConfig = srcConfig.contractsConfig.getContract()
@@ -38,6 +94,7 @@ export async function addVerifier(srcConfig: BTP2Config, dstConfig: BTP2Config){
                 throw new Error(`ICON: failed to register BMV to BMC: ${result.txHash}`);
             }
         })
+    srcConfig.save()
 }
 
 export async function removeVerifier(srcConfig: BTP2Config, dstConfig: BTP2Config){
@@ -57,6 +114,19 @@ export async function removeVerifier(srcConfig: BTP2Config, dstConfig: BTP2Confi
             }
         })
     srcConfig.contractsConfig.removeBmv(dstChainConfig.id)
+    srcConfig.save()
+}
+
+export async function getLink(srcConfig: BTP2Config){
+    const srcChainConfig = srcConfig.chainConfig.getChain()
+    const srcContractsConfig = srcConfig.contractsConfig.getContract()
+
+    const srcNetwork = IconNetwork.getNetwork(srcChainConfig);
+    const bmc = new BMC(srcNetwork, srcContractsConfig.bmc);
+
+    console.log(`${srcChainConfig.id}: getLink`)
+    const links = await bmc.getLinks()
+    console.log(links)
 }
 
 export async function addLink(srcConfig: BTP2Config, dstConfig: BTP2Config, networkId: string){
@@ -69,15 +139,6 @@ export async function addLink(srcConfig: BTP2Config, dstConfig: BTP2Config, netw
     const bmc = new BMC(srcNetwork, srcContractsConfig.bmc);
     const dstBmcAddr = getBtpAddress(dstChainConfig.network, dstContractsConfig.bmc);
 
-    console.log(`${srcChainConfig.id}: addVerifier for ${dstChainConfig.network}`)
-    const bmvAddress = srcConfig.contractsConfig.getBmv(dstChainConfig.id).address
-    await bmc.addVerifier(dstChainConfig.network, bmvAddress)
-        .then((txHash) => bmc.getTxResult(txHash))
-        .then((result) => {
-            if (result.status != 1) {
-                throw new Error(`ICON: failed to register BMV to BMC: ${result.txHash}`);
-            }
-        })
     console.log(`${srcChainConfig.id}: addBTPLink for ${dstBmcAddr}, (networkId:${networkId})`)
     await bmc.addBTPLink(dstBmcAddr, networkId)
         .then((txHash) => bmc.getTxResult(txHash))
@@ -86,42 +147,23 @@ export async function addLink(srcConfig: BTP2Config, dstConfig: BTP2Config, netw
                 throw new Error(`ICON: failed to addBTPLink: ${result.txHash}`);
             }
         })
-    console.log(`${srcChainConfig.id}: addRelay`)
-    await bmc.addRelay(dstBmcAddr, srcNetwork.wallet.getAddress())
-        .then((txHash) => bmc.getTxResult(txHash))
-        .then((result) => {
-            if (result.status != 1) {
-                throw new Error(`ICON: failed to addRelay: ${result.txHash}`);
-            }
-        })
 
     srcConfig.linksConfing.addLink(dstChainConfig.id, {
         'network' : dstChainConfig.network,
         'networkId' : networkId,
         'bmc' : dstContractsConfig.bmc
     })
+    srcConfig.save()
 }
 
 export async function removeLink(srcConfig: BTP2Config, dstConfig: BTP2Config){
     const srcChainConfig = srcConfig.chainConfig.getChain()
-    const srcContractsConfig = srcConfig.contractsConfig.getContract()
     const dstChainConfig = dstConfig.chainConfig.getChain()
     const dstContractsConfig = dstConfig.contractsConfig.getContract()
 
     const bmc = getBMCContract(srcConfig)
     const dstBmcAddr = getBtpAddress(dstChainConfig.network, dstContractsConfig.bmc);
 
-
-    console.log(`${srcChainConfig.id}: remove route for ${dstBmcAddr}`)
-    await bmc.removeRoute(dstBmcAddr)
-        .then((txHash) => bmc.getTxResult(txHash))
-        .then((result) => {
-            if (result.status != 1) {
-                console.log(`Failed to remove route: ${result.txHash}`);
-            }else {
-                console.log(`success to remove route :  ${result.txHash}`)
-            }
-        })
 
     console.log(`${srcChainConfig.id}: removeLink for ${dstBmcAddr}`)
     await bmc.removeLink(dstBmcAddr)
@@ -134,18 +176,8 @@ export async function removeLink(srcConfig: BTP2Config, dstConfig: BTP2Config){
             }
         })
 
-
-    console.log(`${srcChainConfig.id}: removeVerifier for ${dstChainConfig.network}`)
-    await bmc.removeVerifier(dstChainConfig.network)
-        .then((txHash) => bmc.getTxResult(txHash))
-        .then((result) => {
-            if (result.status != 1) {
-                throw new Error(`Failed to removeVerifier: ${result.txHash}`);
-            }else{
-                console.log(`success to removeVerifier :  ${result.txHash}`)
-            }
-        })
     srcConfig.linksConfing.removeLink(dstChainConfig.id)
+    srcConfig.save()
 }
 
 export async function getServices(config: BTP2Config) {
@@ -254,47 +286,4 @@ export async function getStatus(srcConfig: BTP2Config, dstConfig: BTP2Config){
     console.log(`getStatus`)
     console.log(status)
     return status
-}
-
-export async function setupLink(srcConfig: BTP2Config, dstConfig: BTP2Config, networkId: string) {
-    const srcChainConfig = srcConfig.chainConfig.getChain()
-    const srcContractsConfig = srcConfig.contractsConfig.getContract()
-    const dstChainConfig = dstConfig.chainConfig.getChain()
-    const dstContractsConfig = dstConfig.contractsConfig.getContract()
-
-    const srcNetwork = IconNetwork.getNetwork(srcChainConfig);
-    const bmc = new BMC(srcNetwork, srcContractsConfig.bmc);
-    const dstBmcAddr = getBtpAddress(dstChainConfig.network, dstContractsConfig.bmc);
-
-    console.log(`${srcChainConfig.id}: addVerifier for ${dstChainConfig.network}`)
-    const bmvAddress = srcConfig.contractsConfig.getBmv(dstChainConfig.id).address
-    await bmc.addVerifier(dstChainConfig.network, bmvAddress)
-        .then((txHash) => bmc.getTxResult(txHash))
-        .then((result) => {
-            if (result.status != 1) {
-                throw new Error(`ICON: failed to register BMV to BMC: ${result.txHash}`);
-            }
-        })
-    console.log(`${srcChainConfig.id}: addBTPLink for ${dstBmcAddr}, (networkId:${networkId})`)
-    await bmc.addBTPLink(dstBmcAddr, networkId)
-        .then((txHash) => bmc.getTxResult(txHash))
-        .then((result) => {
-            if (result.status != 1) {
-                throw new Error(`ICON: failed to addBTPLink: ${result.txHash}`);
-            }
-        })
-    console.log(`${srcChainConfig.id}: addRelay`)
-    await bmc.addRelay(dstBmcAddr, srcNetwork.wallet.getAddress())
-        .then((txHash) => bmc.getTxResult(txHash))
-        .then((result) => {
-            if (result.status != 1) {
-                throw new Error(`ICON: failed to addRelay: ${result.txHash}`);
-            }
-        })
-
-    srcConfig.linksConfing.addLink(dstChainConfig.id, {
-        'network' : dstChainConfig.network,
-        'networkId' : networkId,
-        'bmc' : dstContractsConfig.bmc
-    })
 }

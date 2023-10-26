@@ -6,7 +6,7 @@ const {IconConverter} = IconService;
 import {BTP2Config, getBtpAddress} from "../../common/config";
 const {JAVASCORE_PATH} = process.env
 import {genEth2JavBmvParams, genBsc2JavBmvParams, getBlockNumber} from "../../common/eth/bmv_param"
-import {setupLink} from "../manager/manager";
+import {addVerifier} from "../manager/manager";
 import {getFirstBtpBlockHeader} from "../../common/icon/bmv_param";
 
 async function deployHertzBmv(srcConfig: BTP2Config, dstConfig: BTP2Config) {
@@ -118,8 +118,7 @@ async function deployBtpBlock(srcConfig: BTP2Config, dstConfig: BTP2Config, netw
 }
 
 async function main() {
-    if (process.env.srcNetworkPath === undefined || process.env.dstNetworkPath === undefined ||
-        process.env.networkTypeId === undefined || process.env.networkId === undefined) {
+    if (process.env.srcNetworkPath === undefined || process.env.dstNetworkPath === undefined) {
         console.log("invalid args")
         return
     }
@@ -138,13 +137,17 @@ async function main() {
             await deployEth2Bmv(srcConfig, dstConfig)
             break;
         case 'btpblock':
-            await deployBtpBlock(srcConfig, dstConfig, process.env.networkTypeId, process.env.networkId)
+            if (process.env.dstNetworkTypeId === undefined || process.env.dstNetworkId === undefined) {
+                console.log("invalid args")
+                return
+            }
+            await deployBtpBlock(srcConfig, dstConfig, process.env.dstNetworkTypeId, process.env.dstNetworkId)
             break;
         default:
             throw new Error(`Unknown bmv type: ${dstConfig.chainConfig.getBmvType()}`);
     }
 
-    await setupLink(srcConfig, dstConfig, process.env.networkId)
+    await addVerifier(srcConfig, dstConfig)
     srcConfig.save()
 }
 

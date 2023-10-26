@@ -1,12 +1,14 @@
 # Update contract
 
 ## Introduction
+
 Contract update CLI
 > **Note**
-> Contracts other than BMV will be updated to change the contract, 
+> Contracts other than BMV will be updated to change the contract,
 > and BMV will distribute and replace new BMV.
 
 ### BMC Update
+
 * ICON
 
 ```
@@ -41,8 +43,8 @@ dstNetworkPath=./ETH_NETWORK_CONFIG.json \
 make eth-update-bmv \ 
 srcNetworkPath=./ETH_NETWORK_CONFIG.json \
 dstNetworkPath=./ICON_NETWORK_CONFIG.json \
-networkTypeId=./ICON_NETWORK_CONFIG.json \
-networkId=./ICON_NETWORK_CONFIG.json
+networkTypeId=0x1 \
+networkId=0x1
 ```
 
 #### Environment
@@ -51,10 +53,8 @@ networkId=./ICON_NETWORK_CONFIG.json
 |:---------------|:------------|:--------------------------------------------|
 | srcNetworkPath | String      | Source Network Configuration file path      |
 | dstNetworkPath | String      | Destination Network Configuration file path |
-| networkTypeId  | Hexadecimal | Network type ID                             |
-| networkId      | Hexadecimal | BTP2 Network ID                             |
-| height         | Hexadecimal | Source Network Configuration file path      |
-
+| networkTypeId  | Hexadecimal | BTPNetworkTypeID                            |
+| networkId      | Hexadecimal | BTPNetworkID                                |
 
 ### XCALL Update
 
