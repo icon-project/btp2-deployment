@@ -253,6 +253,7 @@ export async function removeLink(srcConfig: BTP2Config, dstConfig: BTP2Config){
             return receipt;
         })
 
+    srcConfig.contractsConfig.removeBmv(dstChainConfig.id)
     srcConfig.linksConfing.removeLink(dstChainConfig.id)
     srcConfig.save()
 }
