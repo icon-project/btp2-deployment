@@ -117,6 +117,9 @@ dstNetworkId=0x3 \
 dstNetworkTypeId=0x1
 ```
 
+> **Warning**
+> Executing the 'Add Link' command must be done after deploying the BMV on both networks.
+
 #### Add Link
 [Add Link](./README.md#add-link)
 * Source Network

@@ -130,14 +130,16 @@ make icon-deploy-bmv srcNetworkPath=./berlin.json dstNetworkPath=./bsc.json
 > When the BMV Type of the destination network is ‘btpblock’ 
 > <br/>[[BMV Deploy]](doc/contract_deploy.md#bmv-deploy)
 
-
 * ETH
 ```
-make eth-deploy-bmv srcNetworkPath=./bsc.json dstNetworkPath=./berlin.json networkId=0x1 networkTypeId=0x1
+make eth-deploy-bmv srcNetworkPath=./bsc.json dstNetworkPath=./berlin.json dstNetworkId=0x1 dstNetworkTypeId=0x1
 ```
 > **Note**
 > When the BMV Type of the destination network is ‘bridge’
 > <br/>[[BMV Deploy]](doc/contract_deploy.md#bmv-deploy)
+
+> **Warning**
+> Executing the 'Add Link' command must be done after deploying the BMV on both networks.
 
 #### Add Link
 To connect between networks, run the following command.
