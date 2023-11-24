@@ -1,0 +1,10 @@
+{
+  "chain": {
+    "id": "local_icon0",
+    "network": "0x3.icon",
+    "endpoint": "http://localhost:9080/api/v3/icon_dex",
+    "keystore": "./docker/icon/config/keystore.json",
+    "keysecret": "./docker/icon/config/keysecret",
+    "type": "icon-btpblock-java"
+  }
+}

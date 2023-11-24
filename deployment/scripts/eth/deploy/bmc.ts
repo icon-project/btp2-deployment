@@ -46,6 +46,8 @@ async function deployBmc(config: BTP2Config) {
     config.contractsConfig.addContract('bmcm', bmcm.address)
     config.contractsConfig.addContract('bmcs', bmcs.address)
     config.contractsConfig.addContract('bmc', bmcp.address)
+    console.log('bmc deploy done')
+    return
 }
 
 async function main() {

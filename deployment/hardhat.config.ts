@@ -15,6 +15,11 @@ const config: HardhatUserConfig = {
         auto: false,
         interval: 3000
       }},
+    localhost: {
+      url: "http://127.0.0.1:8545",
+      gas: 2100000,
+      gasPrice: 8000000000,
+    },
     goerli: {
       url: "https://goerli.infura.io/v3/ffbf8ebe228f4758ae82e175640275e0",
       accounts: [process.env.OPERATOR_WALLET_PRIVATE_KEY]

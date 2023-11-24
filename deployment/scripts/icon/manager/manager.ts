@@ -1,4 +1,4 @@
-import {BTP2Config, getBtpAddress, getRelayAddress} from "../../common/config";
+import {BTP2Config, getBtpAddress} from "../../common/config";
 import {BMC, IconNetwork} from "../../common/icon";
 
 function getBMCContract(config: BTP2Config) {
@@ -254,7 +254,7 @@ export async function getReward(srcConfig: BTP2Config, dstConfig: BTP2Config){
 
     const dstNetwork = IconNetwork.getNetwork(srcChainConfig);
     const bmc = new BMC(dstNetwork, srcContractsConfig.bmc);
-    const address = await getRelayAddress(srcChainConfig)
+    const address = dstNetwork.wallet.getAddress()
 
     const reward = await bmc.getReward(dstChainConfig.network, address)
     console.log(`GetRewardReward : ${reward}`)

@@ -4,8 +4,8 @@ const hre = require("hardhat");
 
 export function setEthNetwork(network: string) {
     if (!hre.config.networks[network]) {
-        console.log(network);
-        throw new Error(`Couldn't find network`);
+        console.log(`Couldn't find network (input network : ${network}) `);
+        return
     }
 
     hre.network.name = network;

@@ -1,4 +1,4 @@
-import {BTP2Config, getBtpAddress, getRelayAddress} from "../../common/config";
+import {BTP2Config, getBtpAddress} from "../../common/config";
 import {setEthNetwork} from "../../common/eth/network";
 import {ethers} from "hardhat";
 import {BigNumber} from "ethers";
@@ -295,9 +295,9 @@ export async function getReward(srcConfig: BTP2Config, dstConfig: BTP2Config){
     const srcContractsConfig = srcConfig.contractsConfig.getContract()
     const srcChainConfig = srcConfig.chainConfig.getChain()
     const dstChainConfig = dstConfig.chainConfig.getChain()
-    const address = await getRelayAddress(srcChainConfig)
-
     setEthNetwork(srcChainConfig.hardhatNetwork)
+    const signers = await ethers.getSigners()
+    const address = await signers[0].getAddress()
     const bmcp = await ethers.getContractAt('BMCPeriphery', srcContractsConfig.bmc)
     const reward = await bmcp.getReward(dstChainConfig.network, address)
 

@@ -5,7 +5,14 @@ export BMV_INIT_DATA_PATH= $(PWD)/bmv_init_data.json
 export BTP_BLOCK_HEADER_PATH= $(PWD)/btp_bmv_update_param.json
 ETH2_BEACON_NODE_ENDPOINT=http://35.73.133.230:9596
 GRADLE = ./gradlew
+TARGET_CHAINS = \
+       hardhat \
+       icon0 \
+       icon1
 
+ICON_CHAIN_CONFIG_PATH = \
+       ./docker/deployment_config/local_icon0.json \
+       ./docker/deployment_config/local_icon1.json
 
 HARDHAT = npx hardhat
 TS_NODE = npx ts-node
@@ -22,6 +29,20 @@ test:
 
 
 .PHONY: build clean deploy
+
+start-nodes:
+	@ echo ">>> Start nodes" ; \
+	cd docker; \
+	docker compose up -d $(TARGET_CHAINS)
+
+stop-nodes:
+	@ echo ">>> Stop nodes" ; \
+	cd docker; \
+	docker compose down
+
+setup-node:
+	@ echo ">>> Setup ICON node" ; \
+	$(TS_NODE) scripts/setup_node/setup_node.ts $(ICON_CHAIN_CONFIG_PATH)
 
 
 clean-java:
@@ -74,7 +95,7 @@ eth-deploy-bmc:
 	srcNetworkPath=$(srcNetworkPath) $(HARDHAT) run scripts/eth/deploy/bmc.ts
 
 eth-deploy-bmv:
-	@ echo ">>> Deploy ETH BMC contracts" ; \
+	@ echo ">>> Deploy ETH BMV contracts" ; \
 	srcNetworkPath=$(srcNetworkPath) \
 	dstNetworkPath=$(dstNetworkPath) \
 	dstNetworkTypeId=$(dstNetworkTypeId) \
@@ -289,6 +310,19 @@ icon-manager-relay:
      	address=$(address) \
      	method=$(method) \
 	$(HARDHAT) run scripts/icon/manager/relay.ts
+
+
+icon-manager-open-btp:
+	@ echo ">>> ICON open btp network  " ; \
+ 	 	srcNetworkPath=$(srcNetworkPath) \
+     	networkName=$(networkName) \
+	$(HARDHAT) run scripts/icon/manager/openbtp.ts
+
+demo-app:
+	@ echo ">>> Demo app  " ; \
+ 	 	srcNetworkPath=$(srcNetworkPath) \
+     	dstNetworkPath=$(dstNetworkPath)
+	$(HARDHAT) run scripts/test/demo_dapp.ts
 
 #xCall Multi
 xcall-multi-deploy:

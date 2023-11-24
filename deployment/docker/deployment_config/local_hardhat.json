@@ -1,0 +1,11 @@
+{
+  "chain": {
+    "id": "local_hardhat",
+    "network": "0x539.hardhat",
+    "endpoint": "http://localhost:8545",
+    "keystore": "./docker/hardhat/keystore0.json",
+    "keypass": "hardhat",
+    "type": "hardhat-bridge-solidity",
+    "hardhatNetwork": "localhost"
+  }
+}

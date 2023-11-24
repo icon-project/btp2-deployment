@@ -436,7 +436,7 @@ method=get
 make eth-manager-relay \
 srcNetworkPath=./ETH_NETWORK_CONFIG.json \
 dstNetworkPath=./ICON_NETWORK_CONFIG.json \
-method=set
+method=get
 ```
 
 #### Environment

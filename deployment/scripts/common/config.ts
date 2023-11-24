@@ -1,7 +1,4 @@
 import fs from 'fs';
-import {setEthNetwork} from "./eth/network";
-import {ethers} from "hardhat";
-import {IconNetwork} from "./icon";
 
 export class BTP2Config {
   config: any
@@ -115,17 +112,4 @@ export function isIconChain(chain: any) {
 
 export function isEVMChain(chain: any) {
   return chain.network.includes('hardhat') || chain.network.includes('eth2')|| chain.network.includes('bsc');
-}
-
-export async function getRelayAddress(dstChainConfig: any){
-  if (isEVMChain(dstChainConfig)) {
-    await setEthNetwork(dstChainConfig.hardhatNetwork)
-    const signers = await ethers.getSigners()
-    return await signers[0].getAddress()
-  } else if (isIconChain(dstChainConfig)) {
-    const network = IconNetwork.getNetwork(dstChainConfig);
-    return network.wallet.getAddress()
-  } else {
-    throw new Error(`Unknown source chain: ${dstChainConfig.network}`);
-  }
 }

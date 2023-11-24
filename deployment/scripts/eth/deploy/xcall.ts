@@ -8,10 +8,9 @@ async function deployXcall(config: BTP2Config) {
     await setEthNetwork(chainConfig.hardhatNetwork)
 
     const CallSvc = await ethers.getContractFactory("CallService")
-    const xcallSol = await upgrades.deployProxy(CallSvc, [contractsConfig.bmc],  {
-        txOverrides: { maxFeePerGas: 20e9 },
-    });
+    const xcallSol = await CallSvc.deploy()
     await xcallSol.deployed()
+    await xcallSol.initialize(contractsConfig.bmc)
     console.log(`${chainConfig.id}: xCall: upgrades deployed to ${xcallSol.address}`);
 
     console.log(`${chainConfig.id}: register xCall to BMC`);
