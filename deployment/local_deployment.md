@@ -9,7 +9,7 @@ icon1 <-> icon0 <-> hardhat
 ## Prepare
 1. git submodule add https://github.com/icon-project/btp2-java.git ${PROJECT_ROOT}/javascore
 2. git submodule add https://github.com/icon-project/btp2-solidity.git ${PROJECT_ROOT}/solidity
-3. np install
+3. npm install
 4. cd ./deployment
 5. export OPERATOR_WALLET_PRIVATE_KEY=0xabcd... 
 6. make build-all
@@ -80,7 +80,7 @@ cd ${PROJECT_ROOT}/relay/icon0_hardhat
 docker-compose up -d
 ```
 
-### Run relay
+### Run Demo
 1. One way message
 ```
 make demo-app srcNetworkPath=./docker/deployment_config/local_icon1.json /
