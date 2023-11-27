@@ -540,18 +540,6 @@ async function sendCallMessage(srcConfig: BTP2Config, dstConfig: BTP2Config, msg
     }
 }
 
-async function show_banner() {
-    const banner = `
-       ___           __
-  ___ |__ \\___  ____/ /__  ____ ___  ____
- / _ \\__/ / _ \\/ __  / _ \\/ __ \`__ \\/ __ \\
-/  __/ __/  __/ /_/ /  __/ / / / / / /_/ /
-\\___/____\\___/\\__,_/\\___/_/ /_/ /_/\\____/
-`;
-    console.log(banner);
-}
-
-
 async function main() {
     if (process.env.srcNetworkPath == undefined || process.env.dstNetworkPath == undefined) {
         console.log("invalid args")
@@ -561,17 +549,15 @@ async function main() {
     const srcConfig = new BTP2Config(process.env.srcNetworkPath);
     const dstConfig = new BTP2Config(process.env.dstNetworkPath);
 
-    show_banner()
-        // .then(() => sendCallMessage(srcConfig, dstConfig))
-        // .then(() => sendCallMessage(dstConfig, srcConfig))
-        // .then(() => sendCallMessage(srcConfig, dstConfig, "checkSuccessResponse", true))
-        // .then(() => sendCallMessage(dstConfig, srcConfig, "checkSuccessResponse", true))
-        .then(() => sendCallMessage(srcConfig, dstConfig, "revertMessage", true))
-        // .then(() => sendCallMessage(dstConfig, srcConfig, "revertMessage", true))
-        .catch((error) => {
-            console.error(error);
-            process.exitCode = 1;
-        });
+    if (process.env.rollbackMsg == undefined) {
+        console.log(`one way message`)
+        await sendCallMessage(srcConfig, dstConfig)
+    }else{
+        console.log(`rollback message`)
+        await sendCallMessage(srcConfig, dstConfig, process.env.rollbackMsg, true)
+    }
+    console.log("demo done")
+    return
 }
 
 

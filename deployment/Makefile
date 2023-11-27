@@ -321,7 +321,8 @@ icon-manager-open-btp:
 demo-app:
 	@ echo ">>> Demo app  " ; \
  	 	srcNetworkPath=$(srcNetworkPath) \
-     	dstNetworkPath=$(dstNetworkPath)
+     	dstNetworkPath=$(dstNetworkPath) \
+     	rollbackMsg=$(rollbackMsg)
 	$(HARDHAT) run scripts/test/demo_dapp.ts
 
 #xCall Multi
