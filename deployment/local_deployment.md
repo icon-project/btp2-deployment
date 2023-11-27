@@ -63,8 +63,6 @@ Error: ICON: need to wait until the next term for decentralization
 
 1. Change bmc address in relay config file
    * ${PROJECT_ROOT}/relay/icon0_hardhat/config/icon_to_hardhat_config.json
-```
-```
 
 2. docker compose run
 ```
@@ -83,3 +81,14 @@ docker-compose up -d
 ```
 
 ### Run relay
+1. One way message
+```
+make demo-app srcNetworkPath=./docker/deployment_config/local_icon1.json /
+ dstNetworkPath=./docker/deployment_config/local_hardhat.json
+```
+2. Rollback message
+```
+make demo-app srcNetworkPath=./docker/deployment_config/local_icon1.json /
+ dstNetworkPath=./docker/deployment_config/local_hardhat.json /
+ rollbackMsg=rollbackRelayMessage
+```
