@@ -51,7 +51,7 @@ dstNetworkPath=./ETH_NETWORK_CONFIG.json
 > ```
 > make icon-deploy-bmv \
 > srcNetworkPath=./ICON_NETWORK_CONFIG.json \
-> dstNetworkPath=./BSC_NETWORK_CONFIG.json
+> dstNetworkPath=./BSC_NETWORK_CONFIG.json \
 > height=1000 \ 
 > ```
 
