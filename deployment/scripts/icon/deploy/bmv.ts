@@ -9,13 +9,13 @@ import {genEth2JavBmvParams, genBsc2JavBmvParams, getBlockNumber} from "../../co
 import {addVerifier} from "../manager/manager";
 import {getFirstBtpBlockHeader} from "../../common/icon/bmv_param";
 
-async function deployHertzBmv(srcConfig: BTP2Config, dstConfig: BTP2Config) {
+async function deployHertzBmv(srcConfig: BTP2Config, dstConfig: BTP2Config, height: number) {
     const srcChainConfig = srcConfig.chainConfig.getChain()
     const srcContractsConfig = srcConfig.contractsConfig.getContract()
     const dstChainConfig = dstConfig.chainConfig.getChain()
     const iconNetwork = IconNetwork.getNetwork(srcChainConfig)
     const content = Jar.readFromProject(JAVASCORE_PATH, "bmv/bsc2");
-    const params = await genBsc2JavBmvParams(dstChainConfig, srcContractsConfig.bmc)
+    const params = await genBsc2JavBmvParams(dstChainConfig, srcContractsConfig.bmc, height)
 
     console.log(`java bsc2 bmv init conf data`)
     console.log(params)
@@ -131,8 +131,13 @@ async function main() {
             await deployBridgeBmv(srcConfig, dstConfig)
             break;
         case 'hertz' :
-            await deployHertzBmv(srcConfig, dstConfig)
-            break;
+            if (process.env.height === undefined) {
+                console.log("invalid args")
+                return
+            }else{
+                await deployHertzBmv(srcConfig, dstConfig, parseInt(process.env.height))
+                break;
+            }
         case 'v2.0':
             await deployEth2Bmv(srcConfig, dstConfig)
             break;

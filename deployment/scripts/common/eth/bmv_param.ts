@@ -43,9 +43,9 @@ export async function genUpdateBsc2JavBmvParams(chainConfig: any, bmc: string) {
         _chainId: '0x' + (await ethers.provider.getNetwork()).chainId.toString(16)
     }
 }
-export async function genBsc2JavBmvParams(chainConfig: any, bmc: string, number?: number) {
+export async function genBsc2JavBmvParams(chainConfig: any, bmc: string, height: number) {
     await setEthNetwork(chainConfig.hardhatNetwork)
-    const curnum = number != undefined ? number : await ethers.provider.getBlockNumber();
+    const curnum = height != undefined ? height : await ethers.provider.getBlockNumber();
     const tarnum = curnum - curnum % BSC2_EPOCH;
     console.log('trusted block number:', tarnum);
     const curr = await headByNumber(chainConfig, tarnum);

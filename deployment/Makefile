@@ -79,6 +79,7 @@ eth-deploy-bmv:
 	dstNetworkPath=$(dstNetworkPath) \
 	dstNetworkTypeId=$(dstNetworkTypeId) \
 	dstNetworkId=$(dstNetworkId) \
+	height=$(height) \
 	$(HARDHAT) run scripts/eth/deploy/bmv.ts
 
 eth-deploy-xcall:

@@ -44,6 +44,17 @@ dstNetworkPath=./ETH_NETWORK_CONFIG.json
 > dstNetworkTypeId=0x1
 > ```
 
+> **Note**
+> When the BMV Type of the destination network is ‘hertz’ [[Support Type]](./network_config.md#support-type)
+>
+> **This BMV type is the type of BSC BMV.**
+> ```
+> make icon-deploy-bmv \
+> srcNetworkPath=./ICON_NETWORK_CONFIG.json \
+> dstNetworkPath=./BSC_NETWORK_CONFIG.json
+> height=1000 \ 
+> ```
+
 * ETH
 
 ```
@@ -62,6 +73,7 @@ dstNetworkTypeId=0x1
 > dstNetworkPath=./ICON_BRIDGE_NETWORK_CONFIG.json
 > ```
 
+
 #### Environment
 
 | Name             | Type        | Description                                                          |
@@ -70,6 +82,7 @@ dstNetworkTypeId=0x1
 | dstNetworkPath   | String      | Destination Network Configuration file path                          |
 | dstNetworkTypeId | Hexadecimal | Opened BTPNetworkTypeID of source network in the destination network |
 | dstNetworkId     | Hexadecimal | Opened BTPNetworkID of source network in the destination network     |
+| height           | Number      | Trusted block height                                                 |
 
 ### XCALL Deploy
 
