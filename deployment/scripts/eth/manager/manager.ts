@@ -339,6 +339,53 @@ export async function getStatus(srcConfig: BTP2Config, dstConfig: BTP2Config){
     return status
 }
 
+export async function setFeeTable(srcConfig: BTP2Config, dstConfig: BTP2Config, feeTable: string[]) {
+
+    const srcChainConfig = srcConfig.chainConfig.getChain()
+    const srcContractsConfig = srcConfig.contractsConfig.getContract()
+    const dstChainConfig = dstConfig.chainConfig.getChain()
+
+    setEthNetwork(srcChainConfig.hardhatNetwork)
+    const bmcm = await ethers.getContractAt('BMCManagement', srcContractsConfig.bmcm)
+
+    console.log(`${srcChainConfig.id}: set fee table for ${dstChainConfig.network}`)
+
+    let networks: string[] = [];
+    networks.push(dstChainConfig.network);
+
+    let fees: string[][] = [];
+    fees.push(feeTable);
+
+    await bmcm.setFeeTable(networks, fees, {gasLimit:600000})
+        .then((tx: { wait: (arg0: number) => any; }) => tx.wait(1))
+        .then(async (receipt: { status: number; transactionHash: string; }) => {
+            if (receipt.status != 1) {
+                throw new Error(`Failed to setFeeTable txHash: ${receipt.transactionHash}`);
+            }
+            console.log("setFeeTable txHash : " + receipt.transactionHash)
+        })
+}
+
+export async function getFeeTable(srcConfig: BTP2Config, dstConfig: BTP2Config){
+    const srcChainConfig = srcConfig.chainConfig.getChain()
+    const srcContractsConfig = srcConfig.contractsConfig.getContract()
+    const dstChainConfig = dstConfig.chainConfig.getChain()
+    const dstContractsConfig = dstConfig.contractsConfig.getContract()
+    setEthNetwork(srcChainConfig.hardhatNetwork)
+    const link = getBtpAddress(dstChainConfig.network, dstContractsConfig.bmcm);
+    const bmcm = await ethers.getContractAt('BMCManagement', srcContractsConfig.bmcm)
+
+
+    let networks: string[] = [];
+    networks.push(dstChainConfig.network);
+
+    const feeTable = await bmcm.getFeeTable(networks);
+    console.log(`feeTable : ${feeTable}`)
+    return feeTable
+}
+
+
+
 // export async function setupLink(srcConfig: BTP2Config, dstConfig: BTP2Config, networkTypeId: string, networkId: string) {
 //     const srcChainConfig = srcConfig.chainConfig.getChain()
 //     const srcContractsConfig = srcConfig.contractsConfig.getContract()
