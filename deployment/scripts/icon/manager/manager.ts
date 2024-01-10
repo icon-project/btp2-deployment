@@ -288,3 +288,41 @@ export async function getStatus(srcConfig: BTP2Config, dstConfig: BTP2Config){
     console.log(status)
     return status
 }
+
+export async function getFeeTable(srcConfig: BTP2Config, dstConfig: BTP2Config) {
+
+    const dstChainConfig = dstConfig.chainConfig.getChain()
+
+    let networks: string[] = [];
+    networks.push(dstChainConfig.network);
+
+    const bmc = getBMCContract(srcConfig);
+    const feeTable = await bmc.getFeeTable(networks);
+    console.log("get fee table");
+    console.log(feeTable);
+    
+}
+
+export async function setFeeTable(srcConfig:BTP2Config, dstConfig: BTP2Config, feeTable: string[]) {
+    const dstChainConfig = dstConfig.chainConfig.getChain()
+    const srcChainConfig = srcConfig.chainConfig.getChain()
+
+    console.log(`${srcChainConfig.id}: set fee table for ${dstChainConfig.network}`)
+
+    let networks: string[] = [];
+    networks.push(dstChainConfig.network);
+
+    let fees: string[][] = [];
+    fees.push(feeTable);
+
+    const bmc = getBMCContract(srcConfig);
+    await bmc.setFeeTable(networks, fees)
+        .then((txHash) => bmc.getTxResult(txHash))
+        .then((result) => {
+            if (result.status != 1) {
+                throw new Error(`${srcChainConfig.id}: failed to set fee table: ${result.txHash}`);
+            }
+            console.log("SetFeeTable txHash : "+ result.txHash)
+        })
+    console.log(`${srcChainConfig.id}: setFeeTable for ${dstChainConfig.network}`)
+}

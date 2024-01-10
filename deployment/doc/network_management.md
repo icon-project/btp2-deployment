@@ -512,3 +512,65 @@ method=remove
 | dstNetworkPath | String | Destination Network Configuration file path |
 | address        | String | Relay account address                       |
 | method         | String | method                                      |
+
+### Get Fee Table
+Gets fee table of a network
+
+* ICON
+
+```
+make icon-manager-feeTable \
+srcNetworkPath=./ICON_NETWORK_CONFIG.json \
+dstNetworkPath=./ETH_NETWORK_CONFIG.json \
+method=get
+```
+
+* ETH
+
+```
+make eth-manager-feeTable \
+srcNetworkPath=./ETH_NETWORK_CONFIG.json \
+dstNetworkPath=./ICON_NETWORK_CONFIG.json \
+method=set
+```
+
+#### Environment
+
+| Name           | Type   | Description                                 |
+|:---------------|:-------|:--------------------------------------------|
+| srcNetworkPath | String | Source Network Configuration file path      |
+| dstNetworkPath | String | Destination Network Configuration file path |
+| method         | String | method                                      |
+
+
+### Set Fee Table
+Sets fee table of dst on src chain
+
+* ICON
+
+```
+make icon-manager-feeTable \
+srcNetworkPath=./ICON_NETWORK_CONFIG.json \
+dstNetworkPath=./ETH_NETWORK_CONFIG.json \
+method=set \
+feeTable="[0x1234...,0x12345...]"
+```
+
+* ETH
+
+```
+make eth-manager-feeTable \
+srcNetworkPath=./ETH_NETWORK_CONFIG.json \
+dstNetworkPath=./ICON_NETWORK_CONFIG.json \
+method=set \
+feeTable="[0x1234...,0x12345...]"
+```
+
+#### Environment
+
+| Name           | Type   | Description                                 |
+|:---------------|:-------|:--------------------------------------------|
+| srcNetworkPath | String | Source Network Configuration file path      |
+| dstNetworkPath | String | Destination Network Configuration file path |
+| method         | String | method                                      |
+| feeTable       | String | Fee Table Array in string format            |

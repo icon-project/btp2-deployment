@@ -182,6 +182,14 @@ eth-manager-relay:
  	method=$(method) \
 	$(HARDHAT) run scripts/eth/manager/relay.ts
 
+eth-manager-feeTable:
+	@ echo ">>> ETH ${method} Fee Table"; \
+    srcNetworkPath=$(srcNetworkPath) \
+    dstNetworkPath=$(dstNetworkPath) \
+    feeTable=${feeTable} \
+    method=${method} \
+    $(HARDHAT) run scripts/eth/manager/fee.ts
+
 #ICON
 icon-deploy-bmc:
 	@ echo ">>> Deploy ICON BMC contracts" ; \
@@ -290,6 +298,15 @@ icon-manager-relay:
      	address=$(address) \
      	method=$(method) \
 	$(HARDHAT) run scripts/icon/manager/relay.ts
+
+icon-manager-feeTable:
+	@ echo ">>> ICON ${method} Fee Table"; \
+    srcNetworkPath=$(srcNetworkPath) \
+    dstNetworkPath=$(dstNetworkPath) \
+    feeTable=${feeTable} \
+    method=${method} \
+    $(HARDHAT) run scripts/icon/manager/fee.ts
+
 
 #xCall Multi
 xcall-multi-deploy:
